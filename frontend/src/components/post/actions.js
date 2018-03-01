@@ -20,8 +20,15 @@ function filterPostsByCategory(category) {
 }
 
 function loadPost(id) {
-  return async (dispatch) =>
-    dispatch(receiveCurrentPost(await postsApi.byId(id)));
+  return async (dispatch) => {
+    let post = await postsApi.byId(id);
+
+    if(!post.id || post.deleted)
+      dispatch(goTo("/not-found"));
+    else
+      dispatch(receiveCurrentPost(post))
+
+  };
 }
 
 function savePost(post) {
@@ -59,8 +66,12 @@ function postDownVote(id) {
 function removePost(id) {
   return function doRemovePost(dispatch) {
     postsApi.remove(id);
-    dispatch(goTo(`/`));
+    dispatch(postRemoved(id));
   }
+}
+
+function postRemoved(id) {
+  return {type: postRemoved.name, id}
 }
 
 export {
@@ -74,5 +85,6 @@ export {
   postUpVote,
   postDownVote,
   removePost,
-  receiveCurrentPost
+  receiveCurrentPost,
+  postRemoved
 };

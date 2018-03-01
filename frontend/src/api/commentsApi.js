@@ -13,11 +13,11 @@ async function save(comment) {
 }
 
 async function upVote(id) {
-  return await post(`comments/${id}`, {option: 'postUpVote'})
+  return await post(`comments/${id}`, {option: 'upVote'})
 }
 
 async function downVote(id) {
-  return await post(`comments/${id}`, {option: 'postDownVote'})
+  return await post(`comments/${id}`, {option: 'downVote'})
 }
 
 async function remove(id) {

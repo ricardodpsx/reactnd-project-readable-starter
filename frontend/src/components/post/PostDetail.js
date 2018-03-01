@@ -29,7 +29,7 @@ function PostDetail({currentPost, dispatch}) {
     <div className="pull-right">
       <EditActions
         onEdit={() => dispatch(goTo(`/post/${currentPost.id}/edit`))}
-        onRemove={() => dispatch(removePost(currentPost.id))}
+        onRemove={() => { dispatch(removePost(currentPost.id));  dispatch(goTo(`/`)); }}
       />
     </div>
     <br/>

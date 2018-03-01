@@ -1,5 +1,5 @@
 import {goTo} from "../router/actions";
-import {postDownVote, postUpVote, receiveCurrentPost, receivePosts, sortBy, updateEditingPost} from "./actions";
+import {postDownVote, postUpVote, receiveCurrentPost, receivePosts, sortBy, updateEditingPost, postRemoved} from "./actions";
 
 function currentPost(currentPost = {title: "", body: "", author: "", category: ""}, action) {
   switch (action.type) {
@@ -17,7 +17,8 @@ function currentPost(currentPost = {title: "", body: "", author: "", category: "
 
     case postUpVote.name:
     case postDownVote.name:
-      return {...currentPost, voteScore: currentPost.voteScore + action.vote}
+      return {...currentPost, voteScore: currentPost.voteScore + action.vote};
+
 
     default:
       return currentPost;
@@ -26,16 +27,30 @@ function currentPost(currentPost = {title: "", body: "", author: "", category: "
 }
 
 function posts(posts = [], action) {
+
   switch (action.type) {
 
-    case sortBy.name:
-      posts = [...posts];
-      if(action.direction === "asc")
-        posts.sort((a, b) => a[action.field] - b[action.field]);
+    case sortBy.name: {
+      let newPosts = [...posts];
+      if (action.direction === "asc")
+        newPosts.sort((a, b) => a[action.field] - b[action.field]);
       else
-        posts.sort((a, b) => - a[action.field] + b[action.field]);
+        newPosts.sort((a, b) => -a[action.field] + b[action.field]);
 
-      return posts;
+      return newPosts;
+    }
+
+    case postUpVote.name:
+    case postDownVote.name: {
+      let newPosts = [...posts];
+      let pIndex = newPosts.findIndex((p) => p.id === action.id);
+      newPosts[pIndex] = {...newPosts[pIndex], voteScore: newPosts[pIndex].voteScore + action.vote};
+      return newPosts;
+    }
+
+
+    case postRemoved.name:
+      return posts.filter(p=> p.id !== action.id);
 
     case  receivePosts.name:
       return action.posts;

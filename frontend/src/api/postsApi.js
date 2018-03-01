@@ -21,11 +21,11 @@ async function save(newPost) {
 }
 
 async function upVote(id) {
-  return await post(`posts/${id}`, {option: 'postUpVote'})
+  return await post(`posts/${id}`, {option: 'upVote'})
 }
 
 async function downVote(id) {
-  return await post(`posts/${id}`, {option: 'postDownVote'})
+  return await post(`posts/${id}`, {option: 'downVote'})
 }
 
 async function remove(id) {
