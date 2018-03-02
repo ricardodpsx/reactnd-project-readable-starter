@@ -38,7 +38,10 @@ class App extends Component {
         })
       .path("/post/:id/edit", () => <PostEdit/>,
         ({id}) => dispatch(loadPost(id)))
-      .notFound((path) => `${path} Not Found`);
+      .notFound((path) => <div>
+         <h2>Ups, Page Not Found </h2>
+          <A href='/'> Go back to homepage.</A>
+        </div>);
 
     return (
       <Grid>
